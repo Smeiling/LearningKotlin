@@ -13,10 +13,77 @@
             android:id="@+id/title_bar"
             layout="@layout/common_title_bar" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="SUN"
+                android:textColor="#666666"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="MON"
+                android:textColor="#666666"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="TUE"
+                android:textColor="#666666"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="WED"
+                android:textColor="#666666"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="THR"
+                android:textColor="#666666"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="FRI"
+                android:textColor="#666666"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="SAT"
+                android:textColor="#666666"
+                android:textSize="12dp" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:background="#1133b5e5">
 
             <RadioGroup
@@ -29,37 +96,37 @@
                 <RadioButton
                     android:id="@+id/btn1"
                     style="@style/radioButton"
-                    android:text="SUN" />
+                    android:text="5" />
 
                 <RadioButton
                     android:id="@+id/btn2"
                     style="@style/radioButton"
-                    android:text="MON" />
+                    android:text="6" />
 
                 <RadioButton
                     android:id="@+id/btn3"
                     style="@style/radioButton"
-                    android:text="TWE" />
+                    android:text="7" />
 
                 <RadioButton
                     android:id="@+id/btn4"
                     style="@style/radioButton"
-                    android:text="WED" />
+                    android:text="8" />
 
                 <RadioButton
                     android:id="@+id/btn5"
                     style="@style/radioButton"
-                    android:text="THR" />
+                    android:text="9" />
 
                 <RadioButton
                     android:id="@+id/btn6"
                     style="@style/radioButton"
-                    android:text="FRI" />
+                    android:text="10" />
 
                 <RadioButton
                     android:id="@+id/btn7"
                     style="@style/radioButton"
-                    android:text="SAT" />
+                    android:text="11" />
             </RadioGroup>
 
             <ImageView

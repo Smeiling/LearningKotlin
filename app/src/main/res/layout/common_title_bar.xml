@@ -20,7 +20,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="LOGIN"
-        android:textColor="#333333" />
+        android:textColor="#333333"
+        android:textSize="18dp" />
 
     <ImageView
         android:id="@+id/iv_right"

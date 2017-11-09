@@ -16,6 +16,7 @@ import com.sml.learningkotlin.adapter.CardViewAdapter
 import com.sml.learningkotlin.model.NoteModel
 import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.android.synthetic.main.common_title_bar.view.*
+import java.util.*
 
 //java-extend,implements => kotlin-:,
 class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
@@ -24,6 +25,12 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     var tabWidth = 0
     var btnList: MutableList<RadioButton> = mutableListOf()
 
+    var year = 2017
+    var month = 11
+    var date = 5
+    //星期，默认周日
+    var week = 1
+
     companion object {
         val TAG = CardActivity.javaClass.simpleName
     }
@@ -31,8 +38,18 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
+        initDate()
         initTitleBar()
+        initTabBar()
+        initListener()
+        initVariable()
+        btn1.isChecked = true
+        btn1.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+        view_pager.currentItem = week
+        mCurrentCheckedRadioLeft = getCurrentCheckedRadioLeft()
+    }
 
+    private fun initTabBar() {
         btnList.add(btn1)
         btnList.add(btn2)
         btnList.add(btn3)
@@ -40,17 +57,28 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         btnList.add(btn5)
         btnList.add(btn6)
         btnList.add(btn7)
+
+        for (i in 1..7) {
+            btnList[i - 1].text = (date + i - week).toString()
+        }
+
+
+
         initTabWidth()
-        initListener()
-        initVariable()
-        btn1.isChecked = true
-        btn1.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-        view_pager.currentItem = 1
-        mCurrentCheckedRadioLeft = getCurrentCheckedRadioLeft()
+    }
+
+    private fun initDate() {
+        val calendar = Calendar.getInstance()
+        calendar.timeZone = TimeZone.getTimeZone("GMT+8:00")
+        year = calendar.get(Calendar.YEAR)
+        month = calendar.get(Calendar.MONTH) + 1
+        date = calendar.get(Calendar.DATE)
+        week = calendar.get(Calendar.DAY_OF_WEEK)
     }
 
     private fun initTitleBar() {
-        title_bar.tv_title.text = "SMLSMLSML"
+        var monthes = resources.getStringArray(R.array.ChineseMonth)
+        title_bar.tv_title.text = "你好，" + monthes[month - 1]
     }
 
     private fun initTabWidth() {

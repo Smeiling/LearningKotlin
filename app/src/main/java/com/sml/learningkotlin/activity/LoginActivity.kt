@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         title_bar.iv_right.setImageResource(R.mipmap.icon_check)
         title_bar.iv_right.setOnClickListener(View.OnClickListener {
             if ("smeiling".equals(editText.text.toString()) && "smlsmlsml".equals(editText2.text.toString())) {
-                startActivity(Intent(MainActivity@ this, CardActivity::class.java))
+                startActivity(Intent(LoginActivity@ this, CardActivity::class.java))
             }
         })
         title_bar.iv_left.visibility = View.INVISIBLE
