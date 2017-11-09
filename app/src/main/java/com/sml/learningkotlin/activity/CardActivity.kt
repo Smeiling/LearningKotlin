@@ -15,6 +15,7 @@ import com.sml.learningkotlin.R
 import com.sml.learningkotlin.adapter.CardViewAdapter
 import com.sml.learningkotlin.model.NoteModel
 import kotlinx.android.synthetic.main.activity_card.*
+import kotlinx.android.synthetic.main.common_title_bar.view.*
 
 //java-extend,implements => kotlin-:,
 class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
@@ -30,6 +31,8 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
+        initTitleBar()
+
         btnList.add(btn1)
         btnList.add(btn2)
         btnList.add(btn3)
@@ -44,6 +47,10 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         btn1.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
         view_pager.currentItem = 1
         mCurrentCheckedRadioLeft = getCurrentCheckedRadioLeft()
+    }
+
+    private fun initTitleBar() {
+        title_bar.tv_title.text = "SMLSMLSML"
     }
 
     private fun initTabWidth() {
@@ -83,6 +90,7 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         view_pager.overScrollMode = ViewPager.OVER_SCROLL_NEVER
         view_pager.setOnPageChangeListener(MyPagerOnPageChangeListener())
     }
+
 
     override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
         //java-ClassName varName -> kotlin-var varName

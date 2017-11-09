@@ -20,6 +20,7 @@
             android:layout_height="40dp"
             android:layout_marginBottom="20dp"
             android:background="#FFFFFF"
+            android:gravity="center_vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
@@ -35,10 +36,11 @@
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:background="@android:color/transparent"
                 android:inputType="textPersonName"
                 android:text="smeiling"
-                android:textColor="#666666" />
+                android:textColor="#666666"
+                android:textCursorDrawable="@null" />
         </LinearLayout>
 
         <LinearLayout
@@ -46,6 +48,7 @@
             android:layout_height="40dp"
             android:layout_marginBottom="20dp"
             android:background="#FFFFFF"
+            android:gravity="center_vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
@@ -63,9 +66,10 @@
                 android:id="@+id/editText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:background="@android:color/transparent"
                 android:inputType="textPassword"
                 android:text="smlsmlsml"
+                android:textCursorDrawable="@null"
                 android:textColor="#666666" />
         </LinearLayout>
 

@@ -9,7 +9,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/common_title_bar" />
+        <include
+            android:id="@+id/title_bar"
+            layout="@layout/common_title_bar" />
 
 
         <RelativeLayout
