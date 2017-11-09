@@ -1,9 +1,10 @@
-package com.sml.learningkotlin
+package com.sml.learningkotlin.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.sml.learningkotlin.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.common_title_bar.view.*
 

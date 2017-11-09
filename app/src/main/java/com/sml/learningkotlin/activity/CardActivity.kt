@@ -1,8 +1,7 @@
-package com.sml.learningkotlin
+package com.sml.learningkotlin.activity
 
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -12,6 +11,9 @@ import android.view.WindowManager
 import android.view.animation.AnimationSet
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import com.sml.learningkotlin.R
+import com.sml.learningkotlin.adapter.CardViewAdapter
+import com.sml.learningkotlin.model.NoteModel
 import kotlinx.android.synthetic.main.activity_card.*
 
 //java-extend,implements => kotlin-:,
@@ -63,22 +65,22 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     private fun initVariable() {
-        val views: MutableList<Fragment> = mutableListOf(FragmentA(),
-                FragmentB(),
-                FragmentA(),
-                FragmentB(),
-                FragmentA(),
-                FragmentB(),
-                FragmentA(),
-                FragmentB(),
-                FragmentA())
-        val adapter = FragmentAdapter(supportFragmentManager, views)
+
+        var notes: MutableList<NoteModel> = (1..7)
+                .map { NoteModel("smlsmlsml" + it, "ABCDEFGHIJKLMNOPQRSTUVWXYZ ", "2017-11-11") }
+                .toMutableList()
+//        for (i in 1..7) {
+//            var note = NoteModel("smlsmlsml" + i, "2017-11-11")
+//            notes.add(note)
+//        }
+        var adapter = CardViewAdapter(this, notes)
         view_pager.adapter = adapter
     }
 
     private fun initListener() {
         //java-this => kotlin-ClassName@this
         radioGroup.setOnCheckedChangeListener(CardActivity@ this)
+        view_pager.overScrollMode = ViewPager.OVER_SCROLL_NEVER
         view_pager.setOnPageChangeListener(MyPagerOnPageChangeListener())
     }
 
