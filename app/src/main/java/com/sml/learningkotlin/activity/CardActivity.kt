@@ -1,5 +1,6 @@
 package com.sml.learningkotlin.activity
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.view.ViewPager
@@ -79,6 +80,9 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     private fun initTitleBar() {
         var monthes = resources.getStringArray(R.array.ChineseMonth)
         title_bar.tv_title.text = "你好，" + monthes[month - 1]
+        title_bar.iv_right.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(CardActivity@ this, CreateNoteActivity::class.java))
+        })
     }
 
     private fun initTabWidth() {
