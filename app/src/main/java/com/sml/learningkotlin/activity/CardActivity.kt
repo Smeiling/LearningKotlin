@@ -83,6 +83,9 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         title_bar.iv_right.setOnClickListener(View.OnClickListener {
             startActivity(Intent(CardActivity@ this, CreateNoteActivity::class.java))
         })
+        title_bar.iv_left.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(CardActivity@ this, TimeLineActivity::class.java))
+        })
     }
 
     private fun initTabWidth() {
