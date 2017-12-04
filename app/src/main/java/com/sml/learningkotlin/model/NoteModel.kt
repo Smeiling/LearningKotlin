@@ -1,9 +1,11 @@
 package com.sml.learningkotlin.model
 
+import com.avos.avoscloud.AVObject
+
 /**
  * Created by Smeiling on 2017/11/9.
  */
-class NoteModel {
+class NoteModel : AVObject {
     var title: String? = null
     var content: String? = null
     var date: String? = null
@@ -19,5 +21,6 @@ class NoteModel {
         this.date = date
     }
 
+    constructor()
 
 }

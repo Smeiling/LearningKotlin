@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:inputType="textPassword"
-                android:text="smlsmlsml"
+                android:text="sml940813"
                 android:textCursorDrawable="@null"
                 android:textColor="#666666" />
         </LinearLayout>

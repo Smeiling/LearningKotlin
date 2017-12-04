@@ -19,6 +19,10 @@ import kotlinx.android.synthetic.main.item_card_view.view.*
  */
 class CardViewAdapter(private var context: Context, private var noteList: List<NoteModel>) : PagerAdapter() {
 
+    public fun getItems(): List<NoteModel> {
+        return noteList
+    }
+
     override fun instantiateItem(container: ViewGroup?, position: Int): Any {
 
         //Layout

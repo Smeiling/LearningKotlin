@@ -12,6 +12,11 @@ import android.view.WindowManager
 import android.view.animation.AnimationSet
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
+import com.avos.avoscloud.AVException
+import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.AVQuery
+import com.avos.avoscloud.FindCallback
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.adapter.CardViewAdapter
 import com.sml.learningkotlin.model.NoteModel
@@ -43,7 +48,7 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         initTitleBar()
         initTabBar()
         initListener()
-        initVariable()
+        requestData()
         btn1.isChecked = true
         btn1.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
         view_pager.currentItem = week
@@ -106,16 +111,45 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         img1.layoutParams = params
     }
 
-    private fun initVariable() {
-
-        var notes: MutableList<NoteModel> = (1..7)
-                .map { NoteModel("smlsmlsml" + it, "ABCDEFGHIJKLMNOPQRSTUVWXYZ ", "2017-11-11") }
-                .toMutableList()
+    private fun requestData() {
+        var notes: MutableList<NoteModel> = mutableListOf()
+        var avQuery = AVQuery<AVObject>("NoteModel")
+        avQuery.orderByDescending("createAt")
+        avQuery.findInBackground(object : FindCallback<AVObject>() {
+            override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
+                if (p1 == null) {
+                    p0!!.mapTo(notes) {
+                        NoteModel(it.getString("title"), it.getString("content"), it.getString("date"))
+                    }
+                    updateContentView(notes)
+                } else {
+                    Toast.makeText(baseContext, p1?.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+//
+//        var notes: MutableList<NoteModel> = (1..7)
+//                .map { NoteModel("smlsmlsml" + it, "ABCDEFGHIJKLMNOPQRSTUVWXYZ ", "2017-11-11") }
+//                .toMutableList()
 //        for (i in 1..7) {
 //            var note = NoteModel("smlsmlsml" + i, "2017-11-11")
 //            notes.add(note)
 //        }
-        var adapter = CardViewAdapter(this, notes)
+
+
+//        var adapter = CardViewAdapter(this, notes)
+//        view_pager.adapter = adapter
+
+    }
+
+
+    private fun updateContentView(noteList: List<NoteModel>) {
+
+
+
+
+
+        var adapter = CardViewAdapter(baseContext, noteList!!)
         view_pager.adapter = adapter
     }
 
