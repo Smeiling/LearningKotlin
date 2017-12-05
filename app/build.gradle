@@ -43,4 +43,6 @@ dependencies {
     // LeanCloud 基础包
     compile('cn.leancloud.android:avoscloud-sdk:v4.4.4')
     compile('cn.leancloud.android:avoscloud-statistics:v3.+')
+    // Calendar
+    compile 'com.github.MagicMashRoom:SuperCalendar:v1.4'
 }
