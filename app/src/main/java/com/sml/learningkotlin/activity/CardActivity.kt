@@ -89,11 +89,12 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     private fun initTitleBar() {
         var monthes = resources.getStringArray(R.array.ChineseMonth)
         title_bar.tv_title.text = "你好，" + monthes[month - 1]
+        title_bar.iv_right.setImageResource(R.mipmap.icon_timeline)
         title_bar.iv_right.setOnClickListener({
-            startActivity(Intent(CardActivity@ this, CreateNoteActivity::class.java))
+            startActivity(Intent(CardActivity@ this, TimeLineActivity::class.java))
         })
         title_bar.iv_left.setOnClickListener({
-            startActivity(Intent(CardActivity@ this, TimeLineActivity::class.java))
+            startActivity(Intent(CardActivity@ this, CreateNoteActivity::class.java))
         })
     }
 

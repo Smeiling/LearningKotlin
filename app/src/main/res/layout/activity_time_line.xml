@@ -8,7 +8,9 @@
     tools:context="com.sml.learningkotlin.activity.TimeLineActivity">
 
 
-    <include layout="@layout/common_title_bar" />
+    <include
+        android:id="@+id/title_bar"
+        layout="@layout/common_title_bar" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,7 +22,12 @@
             android:layout_marginLeft="29dp"
             android:background="@color/colorLightBlue" />
 
-        <include layout="@layout/item_timeline_bg" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/time_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
     </FrameLayout>
 
 
