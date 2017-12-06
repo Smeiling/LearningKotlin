@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.dialog_calendar.view.*
  */
 class CalendarDialog : DialogFragment() {
 
-
     lateinit var currentDate: CalendarDate
     lateinit var calendarAdapter: CalendarViewAdapter
     lateinit var selectDateListener: OnSelectDateListener
@@ -39,15 +38,16 @@ class CalendarDialog : DialogFragment() {
         val dm = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(dm)
 
-        view!!.btn_back!!.setOnClickListener(View.OnClickListener {
+        view!!.btn_back!!.setOnClickListener({
             view!!.calendar_view!!.currentItem = view!!.calendar_view.currentPosition + 1
         })
-        view!!.btn_forward!!.setOnClickListener(View.OnClickListener {
+        view!!.btn_forward!!.setOnClickListener({
             view!!.calendar_view!!.currentItem = view!!.calendar_view.currentPosition - 1
         })
 
         var customDayView = CustomDayView(activity, R.layout.custom_day)
         calendarAdapter = CalendarViewAdapter(activity, selectDateListener, CalendarAttr.CalendayType.MONTH, customDayView)
+        CalendarViewAdapter.weekArrayType = 1
         initCurrentDate()
         initMonthPager()
     }
@@ -55,12 +55,10 @@ class CalendarDialog : DialogFragment() {
     private fun initMonthPager() {
         view!!.calendar_view.adapter = calendarAdapter
         view!!.calendar_view.currentItem = MonthPager.CURRENT_DAY_INDEX
-        view!!.calendar_view.setPageTransformer(false, object : ViewPager.PageTransformer {
-            override fun transformPage(page: View?, position: Float) {
-                var pos = Math.sqrt((1 - Math.abs(position)).toDouble()).toFloat()
-                page!!.alpha = pos
-            }
-        })
+        view!!.calendar_view.setPageTransformer(false) { page, position ->
+            var pos = Math.sqrt((1 - Math.abs(position)).toDouble()).toFloat()
+            page!!.alpha = pos
+        }
         view!!.calendar_view.addOnPageChangeListener(object : MonthPager.OnPageChangeListener {
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
             }
@@ -70,8 +68,7 @@ class CalendarDialog : DialogFragment() {
                 if (currentCalendars[p0 % currentCalendars.size] is Calendar) {
                     var date = currentCalendars[p0 % currentCalendars.size].seedDate
                     currentDate = date
-                    show_year_view.text = date.year.toString() + "年"
-                    show_month_view.text = date.month.toString()
+                    show_year_month.text = date.year.toString() + "年" + date.month.toString() + "月"
                 }
             }
 
@@ -83,7 +80,6 @@ class CalendarDialog : DialogFragment() {
 
     private fun initCurrentDate() {
         currentDate = CalendarDate()
-        show_year_view.text = currentDate.year.toString() + "年"
-        show_month_view.text = currentDate.month.toString()
+        show_year_month.text = currentDate.year.toString() + "年" + currentDate.month.toString() + "月"
     }
 }

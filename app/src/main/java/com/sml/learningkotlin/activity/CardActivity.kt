@@ -20,6 +20,7 @@ import com.avos.avoscloud.FindCallback
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.adapter.CardViewAdapter
 import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.utils.Utils
 import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.android.synthetic.main.common_title_bar.view.*
 import java.util.*
@@ -27,18 +28,21 @@ import java.util.*
 //java-extend,implements => kotlin-:,
 class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
-    var mCurrentCheckedRadioLeft = 0f
-    var tabWidth = 0
-    var btnList: MutableList<RadioButton> = mutableListOf()
+    private var mCurrentCheckedRadioLeft = 0f
+    private var tabWidth = 0
+    private var btnList: MutableList<RadioButton> = mutableListOf()
 
-    var year = 2017
-    var month = 11
-    var date = 5
+    private var year = 2017
+    private var month = 11
+    private var date = 5
     //星期，默认周日
-    var week = 1
+    private var week = 1
+
+    private var startDate: Long = 0
+    private var endDate: Long = 0
 
     companion object {
-        val TAG = CardActivity.javaClass.simpleName
+        val TAG = CardActivity.javaClass.simpleName!!
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,8 +71,8 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         for (i in 1..7) {
             btnList[i - 1].text = (date + i - week).toString()
         }
-
-
+        startDate = Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + btn1.text.toString(), "yyyy-MM-dd")
+        endDate = Utils.getTimestampFromDate(year.toString() + "-" + month.toString() + "-" + btn7.text.toString(), "yyyy-MM-dd")
 
         initTabWidth()
     }
@@ -85,10 +89,10 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     private fun initTitleBar() {
         var monthes = resources.getStringArray(R.array.ChineseMonth)
         title_bar.tv_title.text = "你好，" + monthes[month - 1]
-        title_bar.iv_right.setOnClickListener(View.OnClickListener {
+        title_bar.iv_right.setOnClickListener({
             startActivity(Intent(CardActivity@ this, CreateNoteActivity::class.java))
         })
-        title_bar.iv_left.setOnClickListener(View.OnClickListener {
+        title_bar.iv_left.setOnClickListener({
             startActivity(Intent(CardActivity@ this, TimeLineActivity::class.java))
         })
     }
@@ -112,16 +116,21 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     private fun requestData() {
-        var notes: MutableList<NoteModel> = mutableListOf()
+
         var avQuery = AVQuery<AVObject>("NoteModel")
-        avQuery.orderByDescending("createAt")
+        avQuery.orderByAscending("timestamp")
+        avQuery.whereGreaterThanOrEqualTo("timestamp", startDate)
+        avQuery.whereLessThanOrEqualTo("timestamp", endDate)
         avQuery.findInBackground(object : FindCallback<AVObject>() {
             override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
                 if (p1 == null) {
-                    p0!!.mapTo(notes) {
-                        NoteModel(it.getString("title"), it.getString("content"), it.getString("date"))
+                    var noteMap = mutableMapOf<Long, NoteModel>()
+                    p0!!.forEach {
+                        val note = NoteModel(it.getString("title"), it.getString("content"), it.getString("date"))
+                        noteMap.put(note.timestamp, note)
                     }
-                    updateContentView(notes)
+
+                    updateContentView(noteMap)
                 } else {
                     Toast.makeText(baseContext, p1?.message, Toast.LENGTH_SHORT).show()
                 }
@@ -143,14 +152,16 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
 
-    private fun updateContentView(noteList: List<NoteModel>) {
+    private fun updateContentView(noteList: MutableMap<Long, NoteModel>) {
+        var notes: MutableList<NoteModel> = mutableListOf()
+        (1..7)
+                .map { (date + it - week).toString() }
+                .map { Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + it, "yyyy-MM-dd") }
+                .mapTo(notes) { noteList.get(it) ?: NoteModel() }
 
-
-
-
-
-        var adapter = CardViewAdapter(baseContext, noteList!!)
+        var adapter = CardViewAdapter(baseContext, notes!!)
         view_pager.adapter = adapter
+        view_pager.setCurrentItem(1, true)
     }
 
     private fun initListener() {

@@ -2,6 +2,7 @@ package com.sml.learningkotlin.utils
 
 import android.content.Context
 import com.sml.learningkotlin.activity.CardActivity
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -27,4 +28,19 @@ object Utils {
     }
 
 
+    /**
+     * 时间戳转为日期
+     */
+    fun getDateFromTimestamp(timestamp: Long, format: String): String {
+        val format = SimpleDateFormat(format)
+        return format.format(timestamp)
+    }
+
+    /**
+     * 日期转为时间戳
+     */
+    fun getTimestampFromDate(date: String, format: String): Long {
+        val format = SimpleDateFormat(format)
+        return format.parse(date).time
+    }
 }

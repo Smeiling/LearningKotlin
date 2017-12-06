@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
     <LinearLayout
@@ -9,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:layout_centerVertical="true"
-        android:background="#3399ff"
+        android:background="@color/colorLightBlue"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -20,35 +21,21 @@
             android:padding="5dp"
             android:src="@mipmap/icon_tri_left" />
 
-        <TextView
-            android:id="@+id/show_year_view"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right"
-            android:text="2014年"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/show_month_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="11"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/show_year_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2014年"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="14dp"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:maxLines="1"
-            android:text="月"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/btn_forward"
@@ -61,8 +48,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="28dp"
-        android:background="#fff"
+        android:background="@color/transLightBlue"
         android:orientation="horizontal">
+
+        <TextView
+            style="@style/weekIndicatorStyle"
+            android:text="日" />
 
         <TextView
             style="@style/weekIndicatorStyle"
@@ -88,9 +79,6 @@
             style="@style/weekIndicatorStyle"
             android:text="六" />
 
-        <TextView
-            style="@style/weekIndicatorStyle"
-            android:text="日" />
     </LinearLayout>
 
     <com.ldf.calendar.view.MonthPager

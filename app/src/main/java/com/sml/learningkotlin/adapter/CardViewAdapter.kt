@@ -37,9 +37,10 @@ class CardViewAdapter(private var context: Context, private var noteList: List<N
             //空白页
         } else {
             var view = LayoutInflater.from(context).inflate(R.layout.item_card_view, null)
-            view.tv_title.text = noteList[position - 1].title
-            view.tv_content.text = noteList[position - 1].content
-            view.tv_date.text = noteList[position - 1].date
+
+            view.tv_title.text = noteList[position - 1].title ?: ""
+            view.tv_content.text = noteList[position - 1].content ?: ""
+            view.tv_date.text = noteList[position - 1].date ?: ""
             frameLayout.addView(view)
         }
         container!!.addView(frameLayout)
