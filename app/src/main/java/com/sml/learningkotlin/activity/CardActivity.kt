@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.animation.AnimationSet
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -38,6 +37,7 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     //星期，默认周日
     private var week = 1
 
+    private var todayDate: String = ""
     private var startDate: Long = 0
     private var endDate: Long = 0
 
@@ -84,6 +84,7 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         month = calendar.get(Calendar.MONTH) + 1
         date = calendar.get(Calendar.DATE)
         week = calendar.get(Calendar.DAY_OF_WEEK)
+        todayDate = year.toString() + "-" + month.toString() + "-" + date.toString()
     }
 
     private fun initTitleBar() {
@@ -94,7 +95,9 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
             startActivity(Intent(CardActivity@ this, TimeLineActivity::class.java))
         })
         title_bar.iv_left.setOnClickListener({
-            startActivity(Intent(CardActivity@ this, CreateNoteActivity::class.java))
+            var intent = Intent(CardActivity@ this, EditNoteActivity::class.java)
+            intent.putExtra("edit_date", getCurDate(view_pager.currentItem))
+            startActivity(intent)
         })
     }
 
@@ -137,18 +140,6 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 }
             }
         })
-//
-//        var notes: MutableList<NoteModel> = (1..7)
-//                .map { NoteModel("smlsmlsml" + it, "ABCDEFGHIJKLMNOPQRSTUVWXYZ ", "2017-11-11") }
-//                .toMutableList()
-//        for (i in 1..7) {
-//            var note = NoteModel("smlsmlsml" + i, "2017-11-11")
-//            notes.add(note)
-//        }
-
-
-//        var adapter = CardViewAdapter(this, notes)
-//        view_pager.adapter = adapter
 
     }
 
@@ -158,12 +149,18 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         (1..7)
                 .map { (date + it - week).toString() }
                 .map { Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + it, "yyyy-MM-dd") }
-                .mapTo(notes) { noteList.get(it) ?: NoteModel() }
+                .mapTo(notes) { noteList[it] ?: NoteModel() }
 
         var adapter = CardViewAdapter(baseContext, notes!!)
         view_pager.adapter = adapter
         view_pager.setCurrentItem(1, true)
+//        view_pager.setOnClickListener({
+//            var intent = Intent(CardActivity@ this, EditNoteActivity::class.java)
+//            intent.putExtra("edit_date", getCurDate(view_pager.currentItem))
+//            startActivity(intent)
+//        })
     }
+
 
     private fun initListener() {
         //java-this => kotlin-ClassName@this
@@ -175,7 +172,6 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
         //java-ClassName varName -> kotlin-var varName
-        var animationSet = AnimationSet(true)
 
         Log.i(TAG, "checkedId = " + checkedId)
 
@@ -191,6 +187,10 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         mCurrentCheckedRadioLeft = getCurrentCheckedRadioLeft()
         highlightTab(view_pager.currentItem)
+    }
+
+    private fun getCurDate(index: Int): String {
+        return year.toString() + "-" + month + "-" + (date + index - week)
     }
 
     private fun highlightTab(index: Int) {

@@ -39,7 +39,7 @@
                 <action android:name="com.sml.learningkotlin.register" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.CreateNoteActivity"></activity>
+        <activity android:name=".activity.EditNoteActivity"></activity>
         <activity android:name=".activity.TimeLineActivity"></activity>
     </application>
 

@@ -42,9 +42,8 @@ class CustomDayView(context: Context, layoutResource: Int) : DayView(context, la
 
     private fun renderToday(date: CalendarDate) {
         if (date!!.equals(today)) {
-            //tv_date.text = "今"
-
-            tv_date.text = date.day.toString()
+            tv_date.text = "今"
+//            tv_date.text = date.day.toString()
             today_background.visibility = View.VISIBLE
         } else {
             tv_date.text = date.day.toString()
