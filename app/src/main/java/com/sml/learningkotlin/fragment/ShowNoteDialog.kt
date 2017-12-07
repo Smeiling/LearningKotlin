@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.DialogFragment
 import android.text.TextUtils
 import android.util.DisplayMetrics
@@ -54,7 +55,7 @@ class ShowNoteDialog : DialogFragment() {
                 if (p1 == null) {
                     if (p0!!.size > 0) {
                         curObjId = p0[0].objectId ?: ""
-                        var noteModel: NoteModel = NoteModel(p0[0].getString("title"), p0[0].getString("content"), p0[0].getString("date"))
+                        var noteModel = NoteModel(p0[0].getString("title"), p0[0].getString("content"), p0[0].getString("date"))
                         updateView(noteModel)
                     } else {
                         updateView(null)
@@ -86,7 +87,13 @@ class ShowNoteDialog : DialogFragment() {
         dialog_iv_right.setOnClickListener({
             var intent = Intent(activity, EditNoteActivity::class.java)
             intent.putExtra("edit_date", todayDate)
-            startActivity(intent)
+            // 转场动画
+            var option = ActivityOptionsCompat.makeScaleUpAnimation(dialog_title,
+                    0,
+                    0,
+                    Utils.getWindowWidth(activity),
+                    Utils.dpi2px(activity, 48f))
+            startActivity(intent, option.toBundle())
             dismissAllowingStateLoss()
         })
     }

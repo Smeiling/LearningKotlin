@@ -42,7 +42,7 @@ class EditNoteActivity : AppCompatActivity() {
                 if (p1 == null) {
                     if (p0!!.size > 0) {
                         curObjId = p0[0].objectId ?: ""
-                        var noteModel: NoteModel = NoteModel(p0[0].getString("title"), p0[0].getString("content"), p0[0].getString("date"))
+                        var noteModel = NoteModel(p0[0].getString("title"), p0[0].getString("content"), p0[0].getString("date"))
                         updateView(noteModel)
                     } else {
                         updateView(null)

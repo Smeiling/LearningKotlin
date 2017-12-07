@@ -1,6 +1,8 @@
 package com.sml.learningkotlin.utils
 
+import android.app.Activity
 import android.content.Context
+import android.view.WindowManager
 import com.sml.learningkotlin.activity.CardActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,5 +47,21 @@ object Utils {
     fun getTimestampFromDate(date: String, format: String): Long {
         val format = SimpleDateFormat(format)
         return format.parse(date).time
+    }
+
+    /**
+     * 获取屏幕宽度
+     */
+    fun getWindowWidth(activity: Activity): Int {
+        var wm: WindowManager = activity.windowManager
+        return wm.defaultDisplay.width
+    }
+
+    /**
+     * 获取屏幕高度
+     */
+    fun getWindowHeight(activity: Activity): Int {
+        var wm: WindowManager = activity.windowManager
+        return wm.defaultDisplay.height
     }
 }

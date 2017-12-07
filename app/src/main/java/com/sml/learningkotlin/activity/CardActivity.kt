@@ -114,19 +114,13 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     private fun initTabWidth() {
-        var wm: WindowManager = CardActivity@ this.windowManager
-        var windowWidth = wm.defaultDisplay.width
-        var windowHeight = wm.defaultDisplay.height
-
         var w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         var h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         btn1.measure(w, h)
 
-
         var params: ViewGroup.LayoutParams = img1.layoutParams
         Log.d(TAG, "btn1.measuredWidth = " + btn1.measuredWidth)
-//        tabWidth = btn1.measuredWidth * 2
-        tabWidth = windowWidth / 7
+        tabWidth = Utils.getWindowWidth(CardActivity@ this) / 7
         params.width = tabWidth
         img1.layoutParams = params
     }
@@ -147,7 +141,6 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 .map { Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + it, "yyyy-MM-dd") }
                 .mapTo(notes) { noteList[it] ?: NoteModel() }
 
-//        adapter = CardViewAdapter(baseContext, notes!!)
         adapter = CardViewAdapter(baseContext, notes!!)
         adapter.setOnPageClickListener(View.OnClickListener {
             if (it.tag == 0L) {
