@@ -23,6 +23,7 @@
             android:layout_marginBottom="4dp"
             android:background="@android:color/transparent"
             android:hint="标题"
+            android:singleLine="true"
             android:textColor="@color/normalTextColor"
             android:textColorHint="@color/colorLightGray"
             android:textCursorDrawable="@null"

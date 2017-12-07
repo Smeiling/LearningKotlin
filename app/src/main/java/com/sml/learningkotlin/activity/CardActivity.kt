@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -18,6 +19,7 @@ import com.avos.avoscloud.AVQuery
 import com.avos.avoscloud.FindCallback
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.adapter.CardViewAdapter
+import com.sml.learningkotlin.fragment.ShowNoteDialog
 import com.sml.learningkotlin.model.NoteModel
 import com.sml.learningkotlin.utils.Utils
 import kotlinx.android.synthetic.main.activity_card.*
@@ -27,7 +29,7 @@ import java.util.*
 //java-extend,implements => kotlin-:,
 class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
-    private var mCurrentCheckedRadioLeft = 0f
+    private var mCurrentPageIndex: Int = 1
     private var tabWidth = 0
     private var btnList: MutableList<RadioButton> = mutableListOf()
 
@@ -41,6 +43,8 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     private var startDate: Long = 0
     private var endDate: Long = 0
 
+    private lateinit var adapter: CardViewAdapter
+
     companion object {
         val TAG = CardActivity.javaClass.simpleName!!
     }
@@ -52,14 +56,46 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         initTitleBar()
         initTabBar()
         initListener()
-        requestData()
-        btn1.isChecked = true
-        btn1.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-        view_pager.currentItem = week
-        mCurrentCheckedRadioLeft = getCurrentCheckedRadioLeft()
+        //initContentView()
     }
 
+    override fun onStart() {
+        super.onStart()
+        requestData()
+    }
+
+    /**
+     * 获取当前日期用于数据请求及日历内容渲染
+     */
+    private fun initDate() {
+        val calendar = Calendar.getInstance()
+        calendar.timeZone = TimeZone.getTimeZone("GMT+8:00")
+        year = calendar.get(Calendar.YEAR)
+        month = calendar.get(Calendar.MONTH) + 1
+        date = calendar.get(Calendar.DATE)
+        week = calendar.get(Calendar.DAY_OF_WEEK)
+        todayDate = year.toString() + "-" + month.toString() + "-" + date.toString()
+    }
+
+    /**
+     * 初始化标题栏
+     */
+    private fun initTitleBar() {
+        var monthes = resources.getStringArray(R.array.ChineseMonth)
+        title_bar.tv_title.text = "你好，" + monthes[month - 1]
+        title_bar.iv_right.setImageResource(R.mipmap.icon_timeline)
+        title_bar.iv_right.setOnClickListener({
+            startActivity(Intent(CardActivity@ this, TimeLineActivity::class.java))
+        })
+        title_bar.iv_left.setOnClickListener({
+        })
+    }
+
+    /**
+     * 初始化日历栏
+     */
     private fun initTabBar() {
+        mCurrentPageIndex = week - 1
         btnList.add(btn1)
         btnList.add(btn2)
         btnList.add(btn3)
@@ -75,30 +111,6 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         endDate = Utils.getTimestampFromDate(year.toString() + "-" + month.toString() + "-" + btn7.text.toString(), "yyyy-MM-dd")
 
         initTabWidth()
-    }
-
-    private fun initDate() {
-        val calendar = Calendar.getInstance()
-        calendar.timeZone = TimeZone.getTimeZone("GMT+8:00")
-        year = calendar.get(Calendar.YEAR)
-        month = calendar.get(Calendar.MONTH) + 1
-        date = calendar.get(Calendar.DATE)
-        week = calendar.get(Calendar.DAY_OF_WEEK)
-        todayDate = year.toString() + "-" + month.toString() + "-" + date.toString()
-    }
-
-    private fun initTitleBar() {
-        var monthes = resources.getStringArray(R.array.ChineseMonth)
-        title_bar.tv_title.text = "你好，" + monthes[month - 1]
-        title_bar.iv_right.setImageResource(R.mipmap.icon_timeline)
-        title_bar.iv_right.setOnClickListener({
-            startActivity(Intent(CardActivity@ this, TimeLineActivity::class.java))
-        })
-        title_bar.iv_left.setOnClickListener({
-            var intent = Intent(CardActivity@ this, EditNoteActivity::class.java)
-            intent.putExtra("edit_date", getCurDate(view_pager.currentItem))
-            startActivity(intent)
-        })
     }
 
     private fun initTabWidth() {
@@ -119,54 +131,38 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         img1.layoutParams = params
     }
 
-    private fun requestData() {
-
-        var avQuery = AVQuery<AVObject>("NoteModel")
-        avQuery.orderByAscending("timestamp")
-        avQuery.whereGreaterThanOrEqualTo("timestamp", startDate)
-        avQuery.whereLessThanOrEqualTo("timestamp", endDate)
-        avQuery.findInBackground(object : FindCallback<AVObject>() {
-            override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
-                if (p1 == null) {
-                    var noteMap = mutableMapOf<Long, NoteModel>()
-                    p0!!.forEach {
-                        val note = NoteModel(it.getString("title"), it.getString("content"), it.getString("date"))
-                        noteMap.put(note.timestamp, note)
-                    }
-
-                    updateContentView(noteMap)
-                } else {
-                    Toast.makeText(baseContext, p1?.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-
+    private fun initListener() {
+        //java-this => kotlin-ClassName@this
+        radioGroup.setOnCheckedChangeListener(CardActivity@ this)
+        view_pager.overScrollMode = ViewPager.OVER_SCROLL_NEVER
+        view_pager.setOnPageChangeListener(MyPagerOnPageChangeListener())
     }
 
 
     private fun updateContentView(noteList: MutableMap<Long, NoteModel>) {
+
         var notes: MutableList<NoteModel> = mutableListOf()
         (1..7)
                 .map { (date + it - week).toString() }
                 .map { Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + it, "yyyy-MM-dd") }
                 .mapTo(notes) { noteList[it] ?: NoteModel() }
 
-        var adapter = CardViewAdapter(baseContext, notes!!)
+//        adapter = CardViewAdapter(baseContext, notes!!)
+        adapter = CardViewAdapter(baseContext, notes!!)
         adapter.setOnPageClickListener(View.OnClickListener {
-            var intent = Intent(CardActivity@ this, EditNoteActivity::class.java)
-            intent.putExtra("edit_date", getCurDate(view_pager.currentItem))
-            startActivity(intent)
+            if (it.tag == 0L) {
+                var intent = Intent(CardActivity@ this, EditNoteActivity::class.java)
+                intent.putExtra("edit_date", getCurDate(view_pager.currentItem))
+                startActivity(intent)
+            } else {
+                var showNoteDialog = ShowNoteDialog()
+                showNoteDialog.todayDate = getCurDate(view_pager.currentItem)
+                showNoteDialog.show(supportFragmentManager, "show_note_dialog")
+            }
         })
         view_pager.adapter = adapter
-        view_pager.setCurrentItem(1, true)
-    }
-
-
-    private fun initListener() {
-        //java-this => kotlin-ClassName@this
-        radioGroup.setOnCheckedChangeListener(CardActivity@ this)
-        view_pager.overScrollMode = ViewPager.OVER_SCROLL_NEVER
-        view_pager.setOnPageChangeListener(MyPagerOnPageChangeListener())
+        btnList[mCurrentPageIndex].performClick()
+        view_pager.setCurrentItem(mCurrentPageIndex + 1, false)
     }
 
 
@@ -185,7 +181,6 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
             R.id.btn7 -> view_pager.currentItem = 7
         }
 
-        mCurrentCheckedRadioLeft = getCurrentCheckedRadioLeft()
         highlightTab(view_pager.currentItem)
     }
 
@@ -204,28 +199,6 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     }
 
-
-    //java-private returnValue funcName => kotlin-private fun funcName:returnValue
-    private fun getCurrentCheckedRadioLeft(): Float {
-        if (btn1.isChecked) {
-            return 0f
-        } else if (btn2.isChecked) {
-            return tabWidth.toFloat()
-        } else if (btn3.isChecked) {
-            return tabWidth.toFloat() * 2
-        } else if (btn4.isChecked) {
-            return tabWidth.toFloat() * 3
-        } else if (btn5.isChecked) {
-            return tabWidth.toFloat() * 4
-        } else if (btn6.isChecked) {
-            return tabWidth.toFloat() * 5
-        } else if (btn7.isChecked) {
-            return tabWidth.toFloat() * 6
-        }
-        return 0f
-    }
-
-
     inner class MyPagerOnPageChangeListener : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
         }
@@ -235,6 +208,7 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         override fun onPageSelected(position: Int) {
             //java-switch => kotlin-when
+            mCurrentPageIndex = position - 1
             when (position) {
                 0 -> view_pager.currentItem = 1
                 1 -> btn1.performClick()
@@ -249,6 +223,40 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         }
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(true)
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onBackPressed() {
+        moveTaskToBack(true)
+    }
+
+
+    private fun requestData() {
+
+        var avQuery = AVQuery<AVObject>("NoteModel")
+        avQuery.orderByAscending("timestamp")
+        avQuery.whereGreaterThanOrEqualTo("timestamp", startDate)
+        avQuery.whereLessThanOrEqualTo("timestamp", endDate)
+        avQuery.findInBackground(object : FindCallback<AVObject>() {
+            override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
+                if (p1 == null) {
+                    var noteMap = mutableMapOf<Long, NoteModel>()
+                    p0!!.forEach {
+                        val note = NoteModel(it.getString("title"), it.getString("content"), it.getString("date"))
+                        noteMap.put(note.timestamp, note)
+                    }
+                    updateContentView(noteMap)
+                } else {
+                    Toast.makeText(baseContext, p1?.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
 
 }
 

@@ -32,6 +32,9 @@ object Utils {
      * 时间戳转为日期
      */
     fun getDateFromTimestamp(timestamp: Long, format: String): String {
+        if (timestamp == 0L) {
+            return ""
+        }
         val format = SimpleDateFormat(format)
         return format.format(timestamp)
     }

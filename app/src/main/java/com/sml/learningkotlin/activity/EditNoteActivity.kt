@@ -1,5 +1,6 @@
 package com.sml.learningkotlin.activity
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
@@ -87,7 +88,9 @@ class EditNoteActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(todayDate)) {
             todayDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
         }
+        title_bar.title_container.setBackgroundColor(baseContext.resources.getColor(R.color.colorLightBlue))
         title_bar.tv_title.text = todayDate
+        title_bar.tv_title.setTextColor(Color.WHITE)
         title_bar.iv_left.setImageResource(R.mipmap.icon_back)
         title_bar.iv_left.setOnClickListener({
             finish()
