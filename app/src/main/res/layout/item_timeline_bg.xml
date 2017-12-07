@@ -18,18 +18,34 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/timeline_dot" />
 
-        <TextView
-            android:id="@+id/time_content"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="6dp"
-            android:background="@drawable/timeline_text_bg"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:text=""
-            android:textSize="14dp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/time_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="20171010"
+                android:textColor="@color/colorLightBlue"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/time_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/timeline_text_bg"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text=""
+                android:textSize="14dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

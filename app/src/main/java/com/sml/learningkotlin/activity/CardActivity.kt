@@ -152,13 +152,13 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 .mapTo(notes) { noteList[it] ?: NoteModel() }
 
         var adapter = CardViewAdapter(baseContext, notes!!)
+        adapter.setOnPageClickListener(View.OnClickListener {
+            var intent = Intent(CardActivity@ this, EditNoteActivity::class.java)
+            intent.putExtra("edit_date", getCurDate(view_pager.currentItem))
+            startActivity(intent)
+        })
         view_pager.adapter = adapter
         view_pager.setCurrentItem(1, true)
-//        view_pager.setOnClickListener({
-//            var intent = Intent(CardActivity@ this, EditNoteActivity::class.java)
-//            intent.putExtra("edit_date", getCurDate(view_pager.currentItem))
-//            startActivity(intent)
-//        })
     }
 
 

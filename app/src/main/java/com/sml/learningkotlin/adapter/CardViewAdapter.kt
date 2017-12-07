@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.model.NoteModel
 import kotlinx.android.synthetic.main.item_card_view.view.*
@@ -18,9 +19,7 @@ import kotlinx.android.synthetic.main.item_card_view.view.*
  */
 class CardViewAdapter(private var context: Context, private var noteList: List<NoteModel>) : PagerAdapter() {
 
-    public fun getItems(): List<NoteModel> {
-        return noteList
-    }
+    lateinit var pageClickListener: View.OnClickListener
 
     override fun instantiateItem(container: ViewGroup?, position: Int): Any {
 
@@ -30,13 +29,17 @@ class CardViewAdapter(private var context: Context, private var noteList: List<N
         layoutParams.gravity = Gravity.CENTER
         frameLayout.layoutParams = layoutParams
         frameLayout.setBackgroundColor(Color.WHITE)
+
+        frameLayout.setOnClickListener({
+            pageClickListener?.onClick(it)
+        })
         Log.d("sml", noteList.size.toString())
 
         if (position == 0 || position == noteList.size + 1) {
-            //空白页
+            //blank
         } else {
+            frameLayout.tag = noteList[position - 1].timestamp
             var view = LayoutInflater.from(context).inflate(R.layout.item_card_view, null)
-
             view.tv_title.text = noteList[position - 1].title ?: ""
             view.tv_content.text = noteList[position - 1].content ?: ""
             view.tv_date.text = noteList[position - 1].date ?: ""
@@ -57,6 +60,10 @@ class CardViewAdapter(private var context: Context, private var noteList: List<N
 
     override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
         container!!.removeView(`object` as View?)
+    }
+
+    public fun setOnPageClickListener(listener: View.OnClickListener) {
+        pageClickListener = listener
     }
 
 }

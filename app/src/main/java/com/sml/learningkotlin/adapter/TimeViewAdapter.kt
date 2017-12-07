@@ -24,6 +24,7 @@ class TimeViewAdapter(private var noteList: MutableList<NoteModel>) : RecyclerVi
 
     override fun onBindViewHolder(holder: TimeViewHolder?, position: Int) {
         holder?.contentView?.text = noteList[position]?.content
+        holder?.dateView?.text = noteList[position]?.date
     }
 
     override fun getItemCount(): Int {
@@ -38,5 +39,6 @@ class TimeViewAdapter(private var noteList: MutableList<NoteModel>) : RecyclerVi
 
     inner class TimeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var contentView = view.time_content
+        var dateView = view.time_date
     }
 }
