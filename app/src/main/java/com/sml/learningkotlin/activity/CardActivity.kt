@@ -9,17 +9,13 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
-import com.avos.avoscloud.AVException
-import com.avos.avoscloud.AVObject
-import com.avos.avoscloud.AVQuery
-import com.avos.avoscloud.FindCallback
+import com.avos.avoscloud.*
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.adapter.CardViewAdapter
-import com.sml.learningkotlin.fragment.ShowNoteDialog
+import com.sml.learningkotlin.dialog.ShowNoteDialog
 import com.sml.learningkotlin.model.NoteModel
 import com.sml.learningkotlin.utils.Utils
 import kotlinx.android.synthetic.main.activity_card.*
@@ -52,11 +48,23 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
+        checkLoginState()
         initDate()
         initTitleBar()
         initTabBar()
         initListener()
         //initContentView()
+    }
+
+    /**
+     * 检测登录状态
+     */
+    private fun checkLoginState() {
+        if (AVUser.getCurrentUser() == null) {
+            startActivity(Intent(CardActivity@ this, LoginActivity::class.java))
+        } else {
+            Toast.makeText(baseContext, "Hello, " + AVUser.getCurrentUser().username, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onStart() {
@@ -88,6 +96,7 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
             startActivity(Intent(CardActivity@ this, TimeLineActivity::class.java))
         })
         title_bar.iv_left.setOnClickListener({
+            startActivity(Intent(CardActivity@ this, SettingsActivity::class.java))
         })
     }
 

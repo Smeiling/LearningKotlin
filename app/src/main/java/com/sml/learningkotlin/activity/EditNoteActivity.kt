@@ -1,16 +1,20 @@
 package com.sml.learningkotlin.activity
 
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.PopupWindow
 import android.widget.Toast
 import com.avos.avoscloud.*
 import com.ldf.calendar.interf.OnSelectDateListener
 import com.ldf.calendar.model.CalendarDate
 import com.sml.learningkotlin.R
-import com.sml.learningkotlin.fragment.CalendarDialog
-import com.sml.learningkotlin.fragment.WeatherDialog
+import com.sml.learningkotlin.dialog.CalendarDialog
+import com.sml.learningkotlin.dialog.WeatherDialog
 import com.sml.learningkotlin.model.NoteModel
 import com.sml.learningkotlin.utils.Utils
 import kotlinx.android.synthetic.main.activity_create_note.*
@@ -78,8 +82,9 @@ class EditNoteActivity : AppCompatActivity() {
         })
 
         iv_weather.setOnClickListener({
-            var dialog = WeatherDialog()
-            dialog.show(supportFragmentManager, "weather_dialog")
+            //            var dialog = WeatherDialog()
+//            dialog.show(supportFragmentManager, "weather_dialog")
+            //showWeatherDialog()
         })
     }
 
@@ -138,6 +143,16 @@ class EditNoteActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    public fun showWeatherDialog() {
+        var contentView = LayoutInflater.from(baseContext).inflate(R.layout.dialog_weather, null)
+        var popupWindow = PopupWindow(baseContext)
+        popupWindow.contentView = contentView
+        popupWindow.width = ViewGroup.LayoutParams.WRAP_CONTENT
+        popupWindow.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        popupWindow.showAsDropDown(iv_weather, 0, -Utils.dpi2px(baseContext, 220f))
     }
 
 }

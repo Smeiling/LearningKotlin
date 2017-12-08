@@ -2,49 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#555555"
+    android:background="@android:color/transparent"
     android:gravity="center"
     android:orientation="vertical">
 
     <View
-        android:layout_width="160dp"
-        android:layout_height="2dp"
-        android:background="@color/colorLightBlue" />
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:background="@drawable/bg_blue_lt_rt"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
 
     <LinearLayout
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/transLightBlue"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:orientation="vertical"
         android:padding="4dp">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            android:src="@mipmap/icon_weather_sun" />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="4dp"
+            android:src="@mipmap/icon_weather_sunny" />
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            android:src="@mipmap/icon_weather_partly_cloudy" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="4dp"
             android:src="@mipmap/icon_weather_cloudy" />
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            android:src="@mipmap/icon_weather_downpour" />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="4dp"
+            android:src="@mipmap/icon_weather_cloudy2" />
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="4dp"
+            android:src="@mipmap/icon_weather_storm" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="4dp"
             android:src="@mipmap/icon_weather_snow" />
     </LinearLayout>
 

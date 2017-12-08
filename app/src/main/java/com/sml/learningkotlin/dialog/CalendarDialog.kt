@@ -1,5 +1,7 @@
-package com.sml.learningkotlin.fragment
+package com.sml.learningkotlin.dialog
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.view.ViewPager
@@ -7,6 +9,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import com.ldf.calendar.component.CalendarAttr
 import com.ldf.calendar.component.CalendarViewAdapter
 import com.ldf.calendar.interf.OnSelectDateListener
@@ -28,8 +31,8 @@ class CalendarDialog : DialogFragment() {
     lateinit var selectDateListener: OnSelectDateListener
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater?.inflate(R.layout.dialog_calendar, container, false)
-
         return view!!
     }
 

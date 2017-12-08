@@ -1,4 +1,4 @@
-package com.sml.learningkotlin.fragment
+package com.sml.learningkotlin.dialog
 
 import android.content.Intent
 import android.graphics.Color
@@ -34,7 +34,7 @@ class ShowNoteDialog : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var displayMetrics = DisplayMetrics()
         dialog.window.setLayout((displayMetrics.widthPixels * 0.8).toInt(), (displayMetrics.widthPixels * 0.8).toInt())
-        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         var view = inflater?.inflate(R.layout.dialog_show_note, container, false)
         return view!!
     }
