@@ -3,6 +3,7 @@ package com.sml.learningkotlin.activity
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -52,8 +53,12 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         initDate()
         initTitleBar()
         initTabBar()
-        initListener()
-        //initContentView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        updateCalendarBarValue()
+        requestData()
     }
 
     /**
@@ -65,11 +70,6 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         } else {
             Toast.makeText(baseContext, "Hello, " + AVUser.getCurrentUser().username, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        requestData()
     }
 
     /**
@@ -104,7 +104,7 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
      * 初始化日历栏
      */
     private fun initTabBar() {
-        mCurrentPageIndex = week - 1
+        radioGroup.setOnCheckedChangeListener(CardActivity@ this)
         btnList.add(btn1)
         btnList.add(btn2)
         btnList.add(btn3)
@@ -112,13 +112,6 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         btnList.add(btn5)
         btnList.add(btn6)
         btnList.add(btn7)
-
-        for (i in 1..7) {
-            btnList[i - 1].text = (date + i - week).toString()
-        }
-        startDate = Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + btn1.text.toString(), "yyyy-MM-dd")
-        endDate = Utils.getTimestampFromDate(year.toString() + "-" + month.toString() + "-" + btn7.text.toString(), "yyyy-MM-dd")
-
         initTabWidth()
     }
 
@@ -134,13 +127,15 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         img1.layoutParams = params
     }
 
-    private fun initListener() {
-        //java-this => kotlin-ClassName@this
-        radioGroup.setOnCheckedChangeListener(CardActivity@ this)
-        view_pager.overScrollMode = ViewPager.OVER_SCROLL_NEVER
-        view_pager.setOnPageChangeListener(MyPagerOnPageChangeListener())
-    }
+    private fun updateCalendarBarValue() {
+        mCurrentPageIndex = week - 1
+        for (i in 1..7) {
+            btnList[i - 1].text = (date + i - week).toString()
+        }
+        startDate = Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + btn1.text.toString(), "yyyy-MM-dd")
+        endDate = Utils.getTimestampFromDate(year.toString() + "-" + month.toString() + "-" + btn7.text.toString(), "yyyy-MM-dd")
 
+    }
 
     private fun updateContentView(noteList: MutableMap<Long, NoteModel>) {
 
@@ -162,6 +157,8 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 showNoteDialog.show(supportFragmentManager, "show_note_dialog")
             }
         })
+        view_pager.overScrollMode = ViewPager.OVER_SCROLL_NEVER
+        view_pager.setOnPageChangeListener(MyPagerOnPageChangeListener())
         view_pager.adapter = adapter
         btnList[mCurrentPageIndex].performClick()
         view_pager.setCurrentItem(mCurrentPageIndex + 1, false)
@@ -206,7 +203,13 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+//            if (position < 1 && positionOffset < 0.5) {
+//                changeContentWeek(-1)
+//            } else if (position > 6 && positionOffset > 0.5) {
+//                changeContentWeek(1)
+//            }
         }
+
 
         override fun onPageSelected(position: Int) {
             //java-switch => kotlin-when
@@ -223,6 +226,17 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 8 -> view_pager.currentItem = 7
             }
         }
+    }
+
+    private fun changeContentWeek(orientation: Int) {
+        if (orientation > 0) {
+            //right
+        } else {
+            //left
+            date -= 7
+            updateCalendarBarValue()
+        }
+
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

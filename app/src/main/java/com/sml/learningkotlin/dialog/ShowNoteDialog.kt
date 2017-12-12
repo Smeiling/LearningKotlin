@@ -83,7 +83,7 @@ class ShowNoteDialog : DialogFragment() {
         }
 
         dialog_title_text.text = todayDate
-        dialog_iv_right.setImageResource(R.mipmap.icon_edit)
+        dialog_iv_right.setImageDrawable(Utils.getTintedDrawable(context, R.mipmap.icon_edit, Color.WHITE))
         dialog_iv_right.setOnClickListener({
             var intent = Intent(activity, EditNoteActivity::class.java)
             intent.putExtra("edit_date", todayDate)

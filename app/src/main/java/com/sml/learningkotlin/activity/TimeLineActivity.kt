@@ -51,7 +51,7 @@ class TimeLineActivity : AppCompatActivity() {
     }
 
     private fun initTitleBar() {
-        title_bar.tv_title.text = "TIMELINE"
+        title_bar.tv_title.text = "Timeline"
         title_bar.iv_right.visibility = View.INVISIBLE
         title_bar.iv_left.setImageResource(R.mipmap.icon_back)
         title_bar.iv_left.setOnClickListener({

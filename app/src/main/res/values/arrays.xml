@@ -15,4 +15,11 @@
         <item>十一月</item>
         <item>十二月</item>
     </string-array>
+
+
+    <string-array name="SettingsItem">
+        <item>0:Name</item>
+        <item>1:Account ID</item>
+        <item>0:More</item>
+    </string-array>
 </resources>

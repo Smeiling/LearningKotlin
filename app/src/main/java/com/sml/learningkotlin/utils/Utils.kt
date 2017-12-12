@@ -2,7 +2,12 @@ package com.sml.learningkotlin.utils
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.WindowManager
+import com.sml.learningkotlin.R
 import com.sml.learningkotlin.activity.CardActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,5 +68,15 @@ object Utils {
     fun getWindowHeight(activity: Activity): Int {
         var wm: WindowManager = activity.windowManager
         return wm.defaultDisplay.height
+    }
+
+    /**
+     * 图片资源着色
+     */
+    fun getTintedDrawable(context: Context, resId: Int, tintColor: Int): Drawable? {
+        var originalDrawable = ContextCompat.getDrawable(context, resId)
+        var tintDrawable = DrawableCompat.wrap(originalDrawable).mutate()
+        DrawableCompat.setTint(tintDrawable, tintColor)
+        return tintDrawable
     }
 }

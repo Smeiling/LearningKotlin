@@ -3,6 +3,8 @@ package com.sml.learningkotlin.activity
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -96,11 +98,12 @@ class EditNoteActivity : AppCompatActivity() {
         title_bar.title_container.setBackgroundColor(baseContext.resources.getColor(R.color.colorLightBlue))
         title_bar.tv_title.text = todayDate
         title_bar.tv_title.setTextColor(Color.WHITE)
-        title_bar.iv_left.setImageResource(R.mipmap.icon_back)
+        title_bar.iv_left.setImageDrawable(Utils.getTintedDrawable(this, R.mipmap.icon_back, Color.WHITE))
         title_bar.iv_left.setOnClickListener({
             finish()
         })
-        title_bar.iv_right.setImageResource(R.mipmap.icon_check)
+
+        title_bar.iv_right.setImageDrawable(Utils.getTintedDrawable(this, R.mipmap.icon_check, Color.WHITE))
         title_bar.iv_right.setOnClickListener({
             if (!TextUtils.isEmpty(et_title.text) && !TextUtils.isEmpty(et_content.text)) {
                 var note = NoteModel(et_title.text.toString(), et_content.text.toString(), todayDate.replace("-", ""))
