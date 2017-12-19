@@ -3,8 +3,7 @@ package com.sml.learningkotlin.activity
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -16,8 +15,9 @@ import com.ldf.calendar.interf.OnSelectDateListener
 import com.ldf.calendar.model.CalendarDate
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.dialog.CalendarDialog
-import com.sml.learningkotlin.dialog.WeatherDialog
+import com.sml.learningkotlin.dialog.ColorChooseDialog
 import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.utils.CardType
 import com.sml.learningkotlin.utils.Utils
 import kotlinx.android.synthetic.main.activity_create_note.*
 import kotlinx.android.synthetic.main.common_title_bar.view.*
@@ -27,18 +27,23 @@ import java.util.*
 /**
  * Created by Smeiling on 2017/11/15.
  */
-class EditNoteActivity : AppCompatActivity() {
+class EditNoteActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseListener {
+
 
     var todayDate: String = ""
     var curObjId: String = ""
+    var cardType: CardType = CardType.THEME_BLUE
+    lateinit var dialog: DialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_note)
         initTitleBar()
         initBottomBar()
+        updateCardType()
         requestData()
     }
+
 
     private fun requestData() {
         var query = AVQuery<AVObject>("NoteModel")
@@ -88,6 +93,14 @@ class EditNoteActivity : AppCompatActivity() {
 //            dialog.show(supportFragmentManager, "weather_dialog")
             //showWeatherDialog()
         })
+
+        iv_color.setOnClickListener({
+            dialog = ColorChooseDialog()
+            if (dialog is ColorChooseDialog) {
+                (dialog as ColorChooseDialog).setOnColorChooseListener(this)
+            }
+            dialog.show(supportFragmentManager, "color_choose_dialog")
+        })
     }
 
     private fun initTitleBar() {
@@ -95,7 +108,6 @@ class EditNoteActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(todayDate)) {
             todayDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
         }
-        title_bar.title_container.setBackgroundColor(baseContext.resources.getColor(R.color.colorLightBlue))
         title_bar.tv_title.text = todayDate
         title_bar.tv_title.setTextColor(Color.WHITE)
         title_bar.iv_left.setImageDrawable(Utils.getTintedDrawable(this, R.mipmap.icon_back, Color.WHITE))
@@ -119,6 +131,7 @@ class EditNoteActivity : AppCompatActivity() {
             updateNote.put("content", noteModel.content)
             updateNote.put("date", noteModel.date)
             updateNote.put("timestamp", noteModel.timestamp)
+            updateNote.put("card_type", cardType)
             updateNote.saveInBackground(object : SaveCallback() {
                 override fun done(p0: AVException?) {
                     if (p0 == null) {
@@ -135,6 +148,7 @@ class EditNoteActivity : AppCompatActivity() {
             note.put("content", noteModel.content)
             note.put("date", noteModel.date)
             note.put("timestamp", noteModel.timestamp)
+            note.put("card_type", cardType)
             note.saveInBackground(object : SaveCallback() {
                 override fun done(p0: AVException?) {
                     if (p0 == null) {
@@ -158,4 +172,15 @@ class EditNoteActivity : AppCompatActivity() {
         popupWindow.showAsDropDown(iv_weather, 0, -Utils.dpi2px(baseContext, 220f))
     }
 
+    override fun onColorChoosed(color: CardType) {
+        cardType = color
+        dialog.dismissAllowingStateLoss()
+        updateCardType()
+    }
+
+    private fun updateCardType() {
+        val color = Color.parseColor(cardType.rgb)
+        title_bar.title_container.setBackgroundColor(color)
+        et_title.setHintTextColor(color)
+    }
 }

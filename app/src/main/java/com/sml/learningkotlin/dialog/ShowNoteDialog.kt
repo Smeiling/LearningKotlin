@@ -18,6 +18,7 @@ import com.avos.avoscloud.FindCallback
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.activity.EditNoteActivity
 import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.utils.CardType
 import com.sml.learningkotlin.utils.Utils
 import kotlinx.android.synthetic.main.dialog_show_note.*
 import java.text.SimpleDateFormat
@@ -30,6 +31,7 @@ class ShowNoteDialog : DialogFragment() {
 
     var todayDate: String = ""
     var curObjId: String = ""
+    var cardType: CardType = CardType.THEME_BLUE
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var displayMetrics = DisplayMetrics()
@@ -41,10 +43,16 @@ class ShowNoteDialog : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         initTitleBar()
         initBottomBar()
+        updateCardType()
         requestData()
+    }
+
+    private fun updateCardType() {
+        var color = Color.parseColor(cardType.rgb)
+        dialog_title.setBackgroundColor(color)
+        et_title.setHintTextColor(color)
     }
 
     private fun requestData() {
@@ -55,7 +63,10 @@ class ShowNoteDialog : DialogFragment() {
                 if (p1 == null) {
                     if (p0!!.size > 0) {
                         curObjId = p0[0].objectId ?: ""
-                        var noteModel = NoteModel(p0[0].getString("title"), p0[0].getString("content"), p0[0].getString("date"))
+                        var noteModel = NoteModel(p0[0].getString("title"),
+                                p0[0].getString("content"),
+                                p0[0].getString("date"),
+                                p0[0].getString("card_type"))
                         updateView(noteModel)
                     } else {
                         updateView(null)
@@ -70,6 +81,8 @@ class ShowNoteDialog : DialogFragment() {
     private fun updateView(note: NoteModel?) {
         et_title.text = note?.title
         et_content.text = note?.content
+        cardType = note?.cardType!!
+        updateCardType()
     }
 
     private fun initBottomBar() {
