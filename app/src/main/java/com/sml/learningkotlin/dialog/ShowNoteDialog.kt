@@ -1,5 +1,8 @@
 package com.sml.learningkotlin.dialog
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -51,8 +54,16 @@ class ShowNoteDialog : DialogFragment() {
 
     private fun updateCardType() {
         var color = Color.parseColor(cardType.rgb)
-        dialog_title.setBackgroundColor(color)
-        et_title.setHintTextColor(color)
+        val animator = ValueAnimator.ofInt(Color.parseColor(CardType.THEME_BLUE.rgb), color)
+        animator.setEvaluator(ArgbEvaluator())
+        animator.duration = 500
+        animator.addUpdateListener(object : ValueAnimator.AnimatorUpdateListener {
+            override fun onAnimationUpdate(p0: ValueAnimator?) {
+                dialog_title.setBackgroundColor(p0?.getAnimatedValue() as Int)
+            }
+        })
+        animator.start()
+        divider_view.setBackgroundColor(color)
     }
 
     private fun requestData() {
