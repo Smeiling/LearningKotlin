@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="top_status_bar_height">24dp</dimen>
+    <dimen name="app_bar_height">56dp</dimen>
+    <dimen name="bottom_navigation_bar_height">48dp</dimen>
+    <dimen name="float_button_large_size">56dp</dimen>
+    <dimen name="float_button_normal_size">40dp</dimen>
+    <dimen name="avatar_large_size">64dp</dimen>
+    <dimen name="avatar_normal_size">40dp</dimen>
+    <dimen name="click_button_size">48dp</dimen>
+    <dimen name="card_gap_width">8dp</dimen>
+    <dimen name="divider_margin">8dp</dimen>
+    <dimen name="common_padding">16dp</dimen>
+    <dimen name="page_padding">16dp</dimen>
+    <dimen name="text_margin_left">72dp</dimen>
+</resources>

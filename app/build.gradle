@@ -45,4 +45,8 @@ dependencies {
     compile('cn.leancloud.android:avoscloud-statistics:v3.+')
     // Calendar
     compile 'com.github.MagicMashRoom:SuperCalendar:v1.4'
+    //运行时权限
+    implementation 'me.weyye.hipermission:library:1.0.7'
+    //Logger
+    implementation 'com.orhanobut:logger:2.1.1'
 }

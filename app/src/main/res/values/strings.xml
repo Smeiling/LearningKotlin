@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LearningNote</string>
+    <string name="acquire_permission_title">申请使用权限</string>
+    <string name="acquire_permission_content">如拒绝赋予权限，将会影响应用的正常使用。</string>
 </resources>

@@ -6,9 +6,11 @@
     <color name="colorLightBlue">#33b5e5</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorLightGray">#eeeeee</color>
+    <color name="colorBlack">#333333</color>
+    <color name="colorRed">#cc0000</color>
+
     <color name="normalTextColor">#333333</color>
     <color name="secondTextColor">#666666</color>
-    <color name="colorBlack">#333333</color>
+
     <color name="transLightBlue">#7733b5e5</color>
-    <color name="colorRed">#cc0000</color>
 </resources>
