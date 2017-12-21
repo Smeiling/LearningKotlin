@@ -3,7 +3,6 @@ package com.sml.learningkotlin.activity
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -16,8 +15,8 @@ import android.widget.Toast
 import com.avos.avoscloud.*
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.adapter.CardViewAdapter
-import com.sml.learningkotlin.dialog.ShowNoteDialog
-import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.dialog.ShowCardDialog
+import com.sml.learningkotlin.model.CardModel
 import com.sml.learningkotlin.utils.Utils
 import kotlinx.android.synthetic.main.activity_card.*
 import kotlinx.android.synthetic.main.common_title_bar.view.*
@@ -137,24 +136,24 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     }
 
-    private fun updateContentView(noteList: MutableMap<Long, NoteModel>) {
+    private fun updateContentView(cardList: MutableMap<Long, CardModel>?) {
 
-        var notes: MutableList<NoteModel> = mutableListOf()
+        var cards: MutableList<CardModel> = mutableListOf()
         (1..7)
                 .map { (date + it - week).toString() }
                 .map { Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + it, "yyyy-MM-dd") }
-                .mapTo(notes) { noteList[it] ?: NoteModel() }
+                .mapTo(cards) { cardList?.get(it) ?: CardModel() }
 
-        adapter = CardViewAdapter(baseContext, notes!!)
+        adapter = CardViewAdapter(baseContext, cards!!)
         adapter.setOnPageClickListener(View.OnClickListener {
             if (it.tag == 0L) {
-                var intent = Intent(CardActivity@ this, EditNoteActivity::class.java)
+                var intent = Intent(CardActivity@ this, EditCardActivity::class.java)
                 intent.putExtra("edit_date", getCurDate(view_pager.currentItem))
                 startActivity(intent)
             } else {
-                var showNoteDialog = ShowNoteDialog()
-                showNoteDialog.todayDate = getCurDate(view_pager.currentItem)
-                showNoteDialog.show(supportFragmentManager, "show_note_dialog")
+                var showCardDialog = ShowCardDialog()
+                showCardDialog.todayDate = getCurDate(view_pager.currentItem)
+                showCardDialog.show(supportFragmentManager, "show_card_dialog")
             }
         })
         view_pager.overScrollMode = ViewPager.OVER_SCROLL_NEVER
@@ -254,21 +253,25 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     private fun requestData() {
 
-        var avQuery = AVQuery<AVObject>("NoteModel")
+        var avQuery = AVQuery<AVObject>("CardModel")
         avQuery.orderByAscending("timestamp")
         avQuery.whereGreaterThanOrEqualTo("timestamp", startDate)
         avQuery.whereLessThanOrEqualTo("timestamp", endDate)
         avQuery.findInBackground(object : FindCallback<AVObject>() {
             override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
                 if (p1 == null) {
-                    var noteMap = mutableMapOf<Long, NoteModel>()
+                    var cardMap = mutableMapOf<Long, CardModel>()
                     p0!!.forEach {
-                        val note = NoteModel(it.getString("title"), it.getString("content"), it.getString("date"))
-                        noteMap.put(note.timestamp, note)
+                        val card = CardModel(it.getString("title"),
+                                it.getString("content"),
+                                it.getString("date"),
+                                it.getString("card_type"))
+                        cardMap.put(card.timestamp, card)
                     }
-                    updateContentView(noteMap)
+                    updateContentView(cardMap)
                 } else {
                     Toast.makeText(baseContext, p1?.message, Toast.LENGTH_SHORT).show()
+                    updateContentView(null)
                 }
             }
         })

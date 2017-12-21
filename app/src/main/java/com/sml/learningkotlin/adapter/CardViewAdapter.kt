@@ -11,14 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.sml.learningkotlin.R
-import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.model.CardModel
 import com.sml.learningkotlin.utils.Utils
 import kotlinx.android.synthetic.main.item_card_view.view.*
 
 /**
  * Created by Smeiling on 2017/11/9.
  */
-class CardViewAdapter(private var context: Context, private var noteList: List<NoteModel>) : PagerAdapter() {
+class CardViewAdapter(private var context: Context, private var cardList: List<CardModel>) : PagerAdapter() {
 
     lateinit var pageClickListener: View.OnClickListener
 
@@ -34,22 +34,23 @@ class CardViewAdapter(private var context: Context, private var noteList: List<N
         frameLayout.setOnClickListener({
             pageClickListener?.onClick(it)
         })
-        Log.d("sml", noteList.size.toString())
+        Log.d("sml", cardList.size.toString())
 
-        if (position == 0 || position == noteList.size + 1) {
+        if (position == 0 || position == cardList.size + 1) {
             //blank
         } else {
-            frameLayout.tag = noteList[position - 1].timestamp
+            frameLayout.tag = cardList[position - 1].timestamp
             var view = LayoutInflater.from(context).inflate(R.layout.item_card_view, null)
-            if (TextUtils.isEmpty(noteList[position - 1].title)) {
+            view.main_card.setBackgroundColor(Color.parseColor(cardList[position - 1].cardType.rgb))
+            if (TextUtils.isEmpty(cardList[position - 1].title)) {
                 view.empty_view.visibility = View.VISIBLE
                 view.content_view.visibility = View.GONE
             } else {
                 view.empty_view.visibility = View.GONE
                 view.content_view.visibility = View.VISIBLE
-                view.tv_title.text = noteList[position - 1].title ?: ""
-                view.tv_content.text = noteList[position - 1].content ?: ""
-                view.tv_date.text = Utils.getDateFromTimestamp(noteList[position - 1].timestamp, "yyyy-MM-dd")
+                view.tv_title.text = cardList[position - 1].title ?: ""
+                view.tv_content.text = cardList[position - 1].content ?: ""
+                view.tv_date.text = Utils.getDateFromTimestamp(cardList[position - 1].timestamp, "yyyy-MM-dd")
             }
             frameLayout.addView(view)
         }
@@ -63,7 +64,7 @@ class CardViewAdapter(private var context: Context, private var noteList: List<N
 
     override fun getCount(): Int {
         //前后各加一空白页面
-        return noteList.size + 2
+        return cardList.size + 2
     }
 
     override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
@@ -74,8 +75,8 @@ class CardViewAdapter(private var context: Context, private var noteList: List<N
         pageClickListener = listener
     }
 
-    public fun updateItems(noteList: List<NoteModel>) {
-        this.noteList = noteList
+    public fun updateItems(cardList: List<CardModel>) {
+        this.cardList = cardList
         notifyDataSetChanged()
     }
 

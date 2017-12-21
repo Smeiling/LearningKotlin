@@ -6,6 +6,6 @@ package com.sml.learningkotlin.utils
 enum class CardType(val rgb: String) {
     NONE("#000000"),
     THEME_BLUE("#33b5e5"),
-    GREEN("#43e6dd"),
+    GREEN("#33d5c5"),
     PINK("#f98f92")
 }

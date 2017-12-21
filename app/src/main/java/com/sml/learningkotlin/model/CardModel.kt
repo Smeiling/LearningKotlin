@@ -7,7 +7,7 @@ import com.sml.learningkotlin.utils.Utils
 /**
  * Created by Smeiling on 2017/11/9.
  */
-class NoteModel : AVObject {
+class CardModel : AVObject {
     var title: String? = null
     var content: String? = null
     var date: String? = null

@@ -16,10 +16,10 @@ import com.ldf.calendar.model.CalendarDate
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.dialog.CalendarDialog
 import com.sml.learningkotlin.dialog.ColorChooseDialog
-import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.model.CardModel
 import com.sml.learningkotlin.utils.CardType
 import com.sml.learningkotlin.utils.Utils
-import kotlinx.android.synthetic.main.activity_create_note.*
+import kotlinx.android.synthetic.main.activity_create_card.*
 import kotlinx.android.synthetic.main.common_title_bar.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,7 +27,7 @@ import java.util.*
 /**
  * Created by Smeiling on 2017/11/15.
  */
-class EditNoteActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseListener {
+class EditCardActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseListener {
 
 
     var todayDate: String = ""
@@ -37,7 +37,7 @@ class EditNoteActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_note)
+        setContentView(R.layout.activity_create_card)
         initTitleBar()
         initBottomBar()
         updateCardType()
@@ -46,15 +46,15 @@ class EditNoteActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseLis
 
 
     private fun requestData() {
-        var query = AVQuery<AVObject>("NoteModel")
+        var query = AVQuery<AVObject>("CardModel")
         query.whereEqualTo("timestamp", Utils.getTimestampFromDate(todayDate, "yyyy-MM-dd"))
         query.findInBackground(object : FindCallback<AVObject>() {
             override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
                 if (p1 == null) {
                     if (p0!!.size > 0) {
                         curObjId = p0[0].objectId ?: ""
-                        var noteModel = NoteModel(p0[0].getString("title"), p0[0].getString("content"), p0[0].getString("date"))
-                        updateView(noteModel)
+                        var cardModel = CardModel(p0[0].getString("title"), p0[0].getString("content"), p0[0].getString("date"))
+                        updateView(cardModel)
                     } else {
                         updateView(null)
                     }
@@ -65,9 +65,9 @@ class EditNoteActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseLis
         })
     }
 
-    private fun updateView(note: NoteModel?) {
-        et_title.setText(note?.title)
-        et_content.setText(note?.content)
+    private fun updateView(card: CardModel?) {
+        et_title.setText(card?.title)
+        et_content.setText(card?.content)
     }
 
     private fun initBottomBar() {
@@ -118,21 +118,21 @@ class EditNoteActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseLis
         title_bar.iv_right.setImageDrawable(Utils.getTintedDrawable(this, R.mipmap.icon_check, Color.WHITE))
         title_bar.iv_right.setOnClickListener({
             if (!TextUtils.isEmpty(et_title.text) && !TextUtils.isEmpty(et_content.text)) {
-                var note = NoteModel(et_title.text.toString(), et_content.text.toString(), todayDate.replace("-", ""))
-                saveNote(note)
+                var card = CardModel(et_title.text.toString(), et_content.text.toString(), todayDate.replace("-", ""))
+                saveCard(card)
             }
         })
     }
 
-    private fun saveNote(noteModel: NoteModel) {
+    private fun saveCard(cardModel: CardModel) {
         if (!TextUtils.isEmpty(curObjId)) {
-            var updateNote = AVObject.createWithoutData("NoteModel", curObjId)
-            updateNote.put("title", noteModel.title)
-            updateNote.put("content", noteModel.content)
-            updateNote.put("date", noteModel.date)
-            updateNote.put("timestamp", noteModel.timestamp)
-            updateNote.put("card_type", cardType)
-            updateNote.saveInBackground(object : SaveCallback() {
+            var updateCard = AVObject.createWithoutData("CardModel", curObjId)
+            updateCard.put("title", cardModel.title)
+            updateCard.put("content", cardModel.content)
+            updateCard.put("date", cardModel.date)
+            updateCard.put("timestamp", cardModel.timestamp)
+            updateCard.put("card_type", cardType)
+            updateCard.saveInBackground(object : SaveCallback() {
                 override fun done(p0: AVException?) {
                     if (p0 == null) {
                         Toast.makeText(baseContext, "UPDATE SUCCESS", Toast.LENGTH_SHORT).show()
@@ -143,13 +143,13 @@ class EditNoteActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseLis
                 }
             })
         } else {
-            var note = AVObject("NoteModel")
-            note.put("title", noteModel.title)
-            note.put("content", noteModel.content)
-            note.put("date", noteModel.date)
-            note.put("timestamp", noteModel.timestamp)
-            note.put("card_type", cardType)
-            note.saveInBackground(object : SaveCallback() {
+            var card = AVObject("CardModel")
+            card.put("title", cardModel.title)
+            card.put("content", cardModel.content)
+            card.put("date", cardModel.date)
+            card.put("timestamp", cardModel.timestamp)
+            card.put("card_type", cardType)
+            card.saveInBackground(object : SaveCallback() {
                 override fun done(p0: AVException?) {
                     if (p0 == null) {
                         Toast.makeText(baseContext, "SAVE SUCCESS", Toast.LENGTH_SHORT).show()
@@ -181,6 +181,6 @@ class EditNoteActivity : AppCompatActivity(), ColorChooseDialog.OnColorChooseLis
     private fun updateCardType() {
         val color = Color.parseColor(cardType.rgb)
         title_bar.title_container.setBackgroundColor(color)
-        et_title.setHintTextColor(color)
+        divider_line.setBackgroundColor(color)
     }
 }

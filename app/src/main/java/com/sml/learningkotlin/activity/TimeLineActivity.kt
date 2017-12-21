@@ -10,7 +10,7 @@ import com.avos.avoscloud.AVQuery
 import com.avos.avoscloud.FindCallback
 import com.sml.learningkotlin.R
 import com.sml.learningkotlin.adapter.TimeViewAdapter
-import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.model.CardModel
 import kotlinx.android.synthetic.main.activity_time_line.*
 import kotlinx.android.synthetic.main.common_title_bar.view.*
 
@@ -27,20 +27,20 @@ class TimeLineActivity : AppCompatActivity() {
     }
 
     private fun requestData() {
-        var query = AVQuery<AVObject>("NoteModel")
+        var query = AVQuery<AVObject>("CardModel")
         query.orderByDescending("timestamp")
         query.findInBackground(object : FindCallback<AVObject>() {
             override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
-                var list = mutableListOf<NoteModel>()
+                var list = mutableListOf<CardModel>()
                 p0?.forEach {
-                    list.add(NoteModel(it.getString("title"), it.getString("content"), it.getString("date")))
+                    list.add(CardModel(it.getString("title"), it.getString("content"), it.getString("date")))
                 }
                 updateContent(list)
             }
         })
     }
 
-    private fun updateContent(list: MutableList<NoteModel>) {
+    private fun updateContent(list: MutableList<CardModel>) {
         adapter.updateData(list)
     }
 

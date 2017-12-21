@@ -5,30 +5,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.sml.learningkotlin.R
-import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.model.CardModel
 import kotlinx.android.synthetic.main.item_timeline_bg.view.*
 
 
 /**
  * Created by Smeiling on 2017/12/6.
  */
-class TimeViewAdapter(private var noteList: MutableList<NoteModel>) : RecyclerView.Adapter<TimeViewAdapter.TimeViewHolder>() {
+class TimeViewAdapter(private var cardList: MutableList<CardModel>) : RecyclerView.Adapter<TimeViewAdapter.TimeViewHolder>() {
 
     /**
      * 更新数据
      */
-    fun updateData(notes: MutableList<NoteModel>) {
-        this.noteList = notes
+    fun updateData(cards: MutableList<CardModel>) {
+        this.cardList = cards
         notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: TimeViewHolder?, position: Int) {
-        holder?.contentView?.text = noteList[position]?.content
-        holder?.dateView?.text = noteList[position]?.date
+        holder?.contentView?.text = cardList[position]?.content
+        holder?.dateView?.text = cardList[position]?.date
     }
 
     override fun getItemCount(): Int {
-        return noteList.size
+        return cardList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TimeViewHolder {

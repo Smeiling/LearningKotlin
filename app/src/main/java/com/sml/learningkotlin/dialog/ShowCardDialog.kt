@@ -1,7 +1,6 @@
 package com.sml.learningkotlin.dialog
 
 import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.graphics.Color
@@ -19,18 +18,18 @@ import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.AVQuery
 import com.avos.avoscloud.FindCallback
 import com.sml.learningkotlin.R
-import com.sml.learningkotlin.activity.EditNoteActivity
-import com.sml.learningkotlin.model.NoteModel
+import com.sml.learningkotlin.activity.EditCardActivity
+import com.sml.learningkotlin.model.CardModel
 import com.sml.learningkotlin.utils.CardType
 import com.sml.learningkotlin.utils.Utils
-import kotlinx.android.synthetic.main.dialog_show_note.*
+import kotlinx.android.synthetic.main.dialog_show_card.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Created by Smeiling on 2017/12/7.
  */
-class ShowNoteDialog : DialogFragment() {
+class ShowCardDialog : DialogFragment() {
 
     var todayDate: String = ""
     var curObjId: String = ""
@@ -40,7 +39,7 @@ class ShowNoteDialog : DialogFragment() {
         var displayMetrics = DisplayMetrics()
         dialog.window.setLayout((displayMetrics.widthPixels * 0.8).toInt(), (displayMetrics.widthPixels * 0.8).toInt())
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        var view = inflater?.inflate(R.layout.dialog_show_note, container, false)
+        var view = inflater?.inflate(R.layout.dialog_show_card, container, false)
         return view!!
     }
 
@@ -57,28 +56,24 @@ class ShowNoteDialog : DialogFragment() {
         val animator = ValueAnimator.ofInt(Color.parseColor(CardType.THEME_BLUE.rgb), color)
         animator.setEvaluator(ArgbEvaluator())
         animator.duration = 500
-        animator.addUpdateListener(object : ValueAnimator.AnimatorUpdateListener {
-            override fun onAnimationUpdate(p0: ValueAnimator?) {
-                dialog_title.setBackgroundColor(p0?.getAnimatedValue() as Int)
-            }
-        })
+        animator.addUpdateListener { p0 -> dialog_title.setBackgroundColor(p0?.animatedValue as Int) }
         animator.start()
         divider_view.setBackgroundColor(color)
     }
 
     private fun requestData() {
-        var query = AVQuery<AVObject>("NoteModel")
+        var query = AVQuery<AVObject>("CardModel")
         query.whereEqualTo("timestamp", Utils.getTimestampFromDate(todayDate, "yyyy-MM-dd"))
         query.findInBackground(object : FindCallback<AVObject>() {
             override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
                 if (p1 == null) {
                     if (p0!!.size > 0) {
                         curObjId = p0[0].objectId ?: ""
-                        var noteModel = NoteModel(p0[0].getString("title"),
+                        var cardModel = CardModel(p0[0].getString("title"),
                                 p0[0].getString("content"),
                                 p0[0].getString("date"),
                                 p0[0].getString("card_type"))
-                        updateView(noteModel)
+                        updateView(cardModel)
                     } else {
                         updateView(null)
                     }
@@ -89,10 +84,10 @@ class ShowNoteDialog : DialogFragment() {
         })
     }
 
-    private fun updateView(note: NoteModel?) {
-        et_title.text = note?.title
-        et_content.text = note?.content
-        cardType = note?.cardType!!
+    private fun updateView(card: CardModel?) {
+        et_title.text = card?.title
+        et_content.text = card?.content
+        cardType = card?.cardType!!
         updateCardType()
     }
 
@@ -109,7 +104,7 @@ class ShowNoteDialog : DialogFragment() {
         dialog_title_text.text = todayDate
         dialog_iv_right.setImageDrawable(Utils.getTintedDrawable(context, R.mipmap.icon_edit, Color.WHITE))
         dialog_iv_right.setOnClickListener({
-            var intent = Intent(activity, EditNoteActivity::class.java)
+            var intent = Intent(activity, EditCardActivity::class.java)
             intent.putExtra("edit_date", todayDate)
             // 转场动画
             var option = ActivityOptionsCompat.makeScaleUpAnimation(dialog_title,
