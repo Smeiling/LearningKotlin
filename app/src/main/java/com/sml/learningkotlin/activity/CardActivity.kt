@@ -136,6 +136,16 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     }
 
+    // For multi card
+    private fun updateContentView2(cardListMap: MutableMap<Long, MutableList<CardModel>>) {
+        var cards: MutableList<MutableList<CardModel>> = mutableListOf()
+        (1..7)
+                .map { (date + it - week).toString() }
+                .map { Utils.getTimestampFromDate(year.toString() + "-" + month + "-" + it, "yyyy-MM-dd") }
+                .mapTo(cards) { cardListMap?.get(it) ?: mutableListOf(CardModel()) }
+
+    }
+
     private fun updateContentView(cardList: MutableMap<Long, CardModel>?) {
 
         var cards: MutableList<CardModel> = mutableListOf()
@@ -261,13 +271,22 @@ class CardActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
             override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
                 if (p1 == null) {
                     var cardMap = mutableMapOf<Long, CardModel>()
+                    var cardListMap = mutableMapOf<Long, MutableList<CardModel>>()
                     p0!!.forEach {
                         val card = CardModel(it.getString("title"),
                                 it.getString("content"),
                                 it.getString("date"),
                                 it.getString("card_type"))
                         cardMap.put(card.timestamp, card)
+                        if (cardListMap[card.timestamp] == null) {
+                            // Input first item
+                            cardListMap.put(card.timestamp, mutableListOf(card))
+                        } else {
+                            // Append card item
+                            cardListMap[card.timestamp]?.add(card)
+                        }
                     }
+                    updateContentView2(cardListMap)
                     updateContentView(cardMap)
                 } else {
                     Toast.makeText(baseContext, p1?.message, Toast.LENGTH_SHORT).show()

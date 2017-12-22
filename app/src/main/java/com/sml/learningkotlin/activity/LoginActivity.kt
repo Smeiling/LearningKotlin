@@ -12,14 +12,14 @@ import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVUser
 import com.avos.avoscloud.LogInCallback
 import com.sml.learningkotlin.R
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.common_title_bar.view.*
 
 class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
         initTitleBar()
         initContentView()
